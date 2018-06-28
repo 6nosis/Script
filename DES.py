@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
 # -*- coding: UTF-8 -*-
 import os
-import binascii
 from Crypto.Hash import SHA256
 '''
 常量部分：
@@ -11,8 +10,6 @@ P盒(permutation box)
 压缩置换表1-PC1 压缩置换表2-PC2
 拓展置换表E(expansion box)
 '''
-global save
-save = ""
 #IP置换表
 IP = [
     58, 50, 42, 34, 26, 18, 10,  2,
