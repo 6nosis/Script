@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-#! -*- coding: UTF-8 -*-
+# -*- coding: UTF-8 -*-
 import os
 import binascii
 from Crypto.Hash import SHA256
