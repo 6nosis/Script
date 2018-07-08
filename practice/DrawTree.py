@@ -1,6 +1,6 @@
 # drawtree.py
 
-from turtle import Turtle, mainloop
+from turtle import Turtle
 from turtle import done
 
 def tree(plist, l, a, f):
