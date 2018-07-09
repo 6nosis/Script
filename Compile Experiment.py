@@ -104,11 +104,11 @@ def LL1Control(toAnalyze,toShow):
         x = SYN.pop()#弹出x
         w = toAnalyze[cur]#当前分析的字符
         '''x是非终结符号'''
-        if x == "i":#如果x是变量则将当前字符入语义栈
+        if x == "#":#分析结束跳出
+            break
+        elif x == "i":#如果x是变量则将当前字符入语义栈
             cur +=1
             SEM.push(w)
-        elif x == "#":#分析结束跳出
-            break
         elif x == w:#如果x是和w相等，直接进行下一个
             cur +=1
             toShow.add_row([buftoShow(SYN.items),x,w,buftoShow(SEM.items),buftoShow(QT.items)])
