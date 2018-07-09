@@ -1,44 +1,21 @@
-#栈的列表实现
-class Stack(object):
-    # 初始化栈为空列表
-    def __init__(self):
-        self.items = []
-
-    # 判断栈是否为空，返回布尔值
-    def is_empty(self):
-        return self.items == []
-
-    # 返回栈顶元素
-    def peek(self):
-        return self.items[len(self.items) - 1]
-
-    # 返回栈的大小
-    def size(self):
-        return len(self.items)
-
-    # 把新的元素堆进栈里面,如果是字符串，则一个一个进栈
-    def push(self, item):
-        if len(item)==1:
-            self.items.append(item)
+def getOrder(key):
+    result = []
+    tmp = []
+    for i in key:
+        tmp.append(ord(i))
+    order = tmp.copy()
+    order.sort()
+    tmporder = set(order)
+    for i in tmporder:
+        if order.count(i) == 1:
+            result.append(tmp.index(i))
         else:
-            for i in item:
-                self.items.append(i)
+            uniqueindex = unique_index(tmp,i)
+            for j in uniqueindex:
+                result.append(j)
+    return result
 
-    # 把栈顶元素弹出
-    def pop(self):
-        return self.items.pop()
+def unique_index(L,e):
+    return [i for (i,j) in enumerate(L) if j == e]
 
-
-a = Stack()
-
-a.push("hello")
-
-a.push("k")
-k = a.pop()
-print(a.items)
-print(k)
-
-def generateQT(order,symbol,left,right):
-    return "("+str(order)+")("+symbol+","+left+","+right+",t"+str(order)+")"
-
-print(generateQT(1,'*',"b","c"))
+print(getOrder("experiment"))

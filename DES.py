@@ -195,8 +195,8 @@ def PC2change(endkey):
 #生成密钥1-16---
 def keygenerator(key):
     Key = []
-    initkey = PC1change(key)#对key进行PC1置换
-    curCandD = separate(initkey,2)#将key拆成2部分
+    initedKey = PC1change(key)#对key进行PC1置换
+    curCandD = separate(initedKey,2)#将key拆成2部分
     for i in range(16):
         if i == 0 or i == 1 or i == 8 or i == 15:
             curCandD[0] = LorRmove(curCandD[0],1,"L")
@@ -224,15 +224,15 @@ def func(kperturn,rperturn):
     toS = separate(beforeS,8)
     for i,item in enumerate(toS):
         toS[i] = Schange(item,i)
-    tmpresult = merge(toS)
-    result = Pchange(tmpresult)
+    tmpResult = merge(toS)
+    result = Pchange(tmpResult)
     return result
 
 #S置换---
 def Schange(str,turn):
-    colunm = int(str[1:5],2)#列
+    column = int(str[1:5],2)#列
     row = int((str[0]+str[5]),2)#行
-    tmpresult = S[turn][row*16 + colunm]
+    tmpresult = S[turn][row*16 + column]
     result = bin(int(tmpresult)).replace("0b","").zfill(4)
     return result
 
@@ -280,32 +280,32 @@ def reinitpermutation(tmp):
 
 #异或操作---
 def xor(left,right):
-    lenth = len(left)
-    if lenth != len(right):
+    length = len(left)
+    if length != len(right):
         print("异或异常")
         exit(-1)
     result = int(left,2) ^ int(right,2)
-    return bin(result).replace("0b","").zfill(lenth)
+    return bin(result).replace("0b","").zfill(length)
 
 #加解密主流程---
 def cryption(plaintext, key, EnorDe):
     Plaintext = gruoping(plaintext)#将明文分组
-    ciphertext = ""
+    cipherText = ""
     KEY = str2bin(key)#将密钥转为二进制字符串
     for i in Plaintext:#对每组加密
-        initedplaintext = initpermutation(i)#IP变换
-        tmp = turnoperation(initedplaintext,KEY,EnorDe)#16轮加密
+        initedPlaintext = initpermutation(i)#IP变换
+        tmp = turnoperation(initedPlaintext,KEY,EnorDe)#16轮加密
         result = reinitpermutation(tmp)#IP逆变换
         Result = bin2str(result)
-        ciphertext += Result
-    return ciphertext
+        cipherText += Result
+    return cipherText
 
 #解密主流程---
 def decryption(ciphertext,key):
     tmp = cryption(ciphertext,key, "D")
-    dele = tmp[-1]
-    if dele in ["1","2","3","4","5","6","7"]:
-        return tmp[:-int(dele)]
+    delete = tmp[-1]
+    if delete in ["1","2","3","4","5","6","7"]:
+        return tmp[:-int(delete)]
     else:
         return tmp
 
@@ -315,11 +315,11 @@ def encryption(plaintext, key):
 
 #采用PKCS7标准填充明文：字节对8取余得r，为0补8个"8",不为0补8-r个8-r
 def PKCS7Padding(plaintext):
-    topaddinglen = 8 - (len(plaintext) %8)
-    if topaddinglen == 8:
+    toPaddinglen = 8 - (len(plaintext) %8)
+    if toPaddinglen == 8:
         result = plaintext
     else:
-        result = plaintext + str(topaddinglen) * topaddinglen
+        result = plaintext + str(toPaddinglen) * toPaddinglen
     return result
 
 #检查密钥是否符合标准,密钥必须为8的倍数个字节---
@@ -360,9 +360,9 @@ def gruoping(plaintext):
 
 def authKey(key):
     while True:
-        keyhash = SHA256.new()
-        keyhash.update(key.encode('ascii'))
-        cmp = keyhash.digest()
+        keyHash = SHA256.new()
+        keyHash.update(key.encode('ascii'))
+        cmp = keyHash.digest()
         global save
         tmp = save
         if cmp == tmp:
@@ -387,18 +387,18 @@ def inputandsaveKey(flag):
 
 #对字符串加密
 def toStr():
-    plaintext = input("请输入要加密的密文(不限制位数,只能为ASCII符号)：\n")
+    plaintext = input("请输入要加密的明文(不限制位数)：\n")
     Key = inputandsaveKey(0)
     Plaintext = PKCS7Padding(plaintext)
-    ciphertext = encryption(str2bin(Plaintext), Key)
-    print("加密后的结果是：\n%s\n十六进制：" %ciphertext)
-    for i in ciphertext:
+    cipherText = encryption(str2bin(Plaintext), Key)
+    print("加密后的结果是：\n%s\n十六进制：" %cipherText)
+    for i in cipherText:
         print(hex(int(bin(ord(i)).replace("0b",""),2)).replace("0x",""),end="")
     choice = input("\n请输入d解密：\n")
     if choice == 'd' :
         K = inputandsaveKey(1)
         authKey(K)
-        plain = decryption(str2bin(ciphertext),K)
+        plain = decryption(str2bin(cipherText),K)
         print("原文是：\n%s" %plain)
     else :
         print("已退出")
@@ -412,9 +412,9 @@ def toFile():
     Key = inputandsaveKey(0)
     with open("./"+filename,'rb') as r:
         Plaintext = PKCS7Padding(str(r.read()))
-        encry = encryption(str2bin(Plaintext), Key)
+        encrypt = encryption(str2bin(Plaintext), Key)
     with open("./"+filename,'wb') as w:
-        w.write(encry.encode('utf-8'))
+        w.write(encrypt.encode('utf-8'))
     print("文件已加密，当前文件内容是：")
     with open("./"+filename,'r') as r:
         file = r.read()
