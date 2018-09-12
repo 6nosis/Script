@@ -413,8 +413,7 @@ def toFile():
     with open("./"+filename,'rb') as r:
         Plaintext = PKCS7Padding(str(r.read()))
         encrypt = encryption(str2bin(Plaintext), Key)
-    with open("./"+filename,'wb') as w:
-        w.write(encrypt.encode('utf-8'))
+
     print("文件已加密，当前文件内容是：")
     with open("./"+filename,'r') as r:
         file = r.read()
